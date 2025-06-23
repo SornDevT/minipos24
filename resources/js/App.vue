@@ -1,6 +1,6 @@
 <template lang="">
     <div>
-        <h1> Hello Vue JS </h1>
+        <h1> Hello Vue JS update App Vue </h1>
     </div>
 </template>
 <script>
