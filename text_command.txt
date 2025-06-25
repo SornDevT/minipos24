@@ -3,11 +3,16 @@ Laravel
     - composer install          = ຕິດຕັ້ງ library ຂອງ Laravel 
     - php artisan key:generate  = ສ້າງ Key ໃຫ້ກັບ Project
     - composer run dev          = ຄຳສັ່ງ Run Server ພ້ອມ Dev
+    - php artisan make:controller ‘ຊື່ Controller’: ຄຳສັ່ງໃນການ ສ້າງ Controller
+    - php artisan make:model ‘ຊື່ Model’ -m  : ຄຳສັ່ງໃນການ ສ້າງ Model, -m ແມ່ນ ໃຫ້ສ້າງໄລ໌ migration
+    - php artisan route:cache  : ຄຳສັ່ງເຄຼຍ Route Cache
+    - php artisan migrate  : ຄຳສັ່ງ ທຳການ Migrate ສ້າງຕາຕະລາງ
 
 
 VueJS
     - npm install               = ຕິດຕັ້ງ Packet ຂອງ NodeJS
     - npm run dev               = ເປັນຄຳສັ່ງ compil Vue 
+    - npm run build : ຄຳສັ່ງ deploy ໂປຼເຈັກ
 
 Git
     - git init                  = ຕິດຕັ້ງ Git ໃຫ້ກັບ Project 

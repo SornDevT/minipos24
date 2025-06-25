@@ -1,0 +1,57 @@
+- Product
+- Category
+- Transction
+- Bill 
+- User
+
+All Table 
+
+    1. Table: Product (Model)
+        Fill name       Data Type 
+        - ProductName   string      = ຊື່ສິນຄ້າ
+        - CategoryID    integer     = id ໜວດໝູ່ສິນຄ້າ
+        - ImagePath     string      = ເສັ້ນທາງຮູບພາບ
+        - Qty           integer     = ຈຳນວນ ສິນຄ້າ
+        - PriceBuy      integer     = ລາຄາຊື້ (ຈຳນວນເຕັມ) 10,000  decemal = 10,000.00
+        - PriceSell     integer     = ລາຄາຂາຍ
+
+    2. Table: Category (Model)
+        Fill name       Data Type 
+        - CategoryName  string      = ຊື່ໝວດໝູ່ສິນຄ້າ
+
+    3. Table: Transection (Model)
+        Fill name       Data Type 
+        - TranID        string      = ລະຫັດທຸລະກຳ
+        - TranType      string      = ປະເພດທຸລະກຳ 
+        - ProductID     integer     = ລະຫັດສິນຄ້າ
+        - Qty           integer     = ຈຳນວນ 
+        - Price         integer     = ລາຄາ 
+        - Detail        string      = ລາຍລະອຽດ
+
+    4. Table: User (Model)
+        Fill name       Data Type 
+        - UserName      string      = ຊື່ຜູ້ໃຊ້
+        - Email         string      = ອີເມວລ໌
+        - Password      string      = ລະຫັດຜ່ານ
+
+    5. Table: Bill (Model)
+        Fill name       Data Type 
+        - BillID        string      = ເລກທີ່ໃບບິນ
+        - CustomerName  string      = ຊື່ລະຄ້າ
+        - PhoneNumber   string      = ເບີໂທລູຄ້າ
+
+    6. Table: BillItem (Model)
+        Fill name       Data Type 
+        - BillID        string      = ເລກທີ່ໃບບິນ
+        - ItemName      string      = ຊື່ລາຍການ
+        - Qty           integer     = ຈຳນວນ
+        - Price         integer     = ລາຄາ
+
+
+All Controller 
+
+    - ProductController     =   ຈັດການຂໍ້ມູນສິນຄ້າ
+    - CategoryController    =   ຈັດການໝວດໝູ່ສິນຄ້າ
+    - TransectionController =   ຈັດການການເຄື່ອນໄຫວ
+    - BillController        =   ຈັດການຂໍ້ມູນໃບບິນ
+    - ReportController      =   ຈັດການລາຍງານ

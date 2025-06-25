@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="../assets/vendor/css/core.css">
     <link rel="stylesheet" href="../assets/css/demo.css">
+    <link rel="stylesheet" href="../assets/css/font_lao.css">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    
