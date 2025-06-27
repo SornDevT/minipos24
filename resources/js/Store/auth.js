@@ -1,0 +1,24 @@
+import { defineStore } from "pinia";
+
+export const useStore = defineStore("auth", {
+    state: () => ({
+        user: null,
+        token: 'fdsfsdfsdf456465',
+    }),
+    getters: {
+        getUser: (state) => state.user,
+        getToken: (state) => state.token,
+    },
+    actions: {
+        setUser(new_user) {
+            this.user = new_user;
+        },
+        setToken(new_token) {
+            this.token = new_token;
+        },
+        logOut() {
+            this.user = null;
+            this.token = null;
+        }
+    },
+});

@@ -11,7 +11,7 @@
 
 <!-- Menu -->
 
-    <Menu /> 
+    <Menu v-if="store.getToken" /> 
 
 
 <!-- / Menu -->
@@ -27,11 +27,8 @@
 
 <!-- Navbar -->
 
-<nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
+<nav v-if="store.getToken" class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme" id="layout-navbar">
   
-
-
-
 
   <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0   d-xl-none ">
     <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
@@ -135,7 +132,8 @@
         
 
 <!-- Footer -->
-<footer class="content-footer footer bg-footer-theme">
+<footer class="content-footer footer bg-footer-theme" v-if="store.getToken">
+  {{ store.getToken }}
   <div class="container-xxl">
     <div class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
       <div class="mb-2 mb-md-0">
@@ -181,8 +179,17 @@
 
 </template>
 <script>
+
+import { useStore } from './Store/auth'
+
 export default {
-    
+    setup() {
+        const store = useStore();
+
+        return {
+            store
+        }
+    }
 }
 </script>
 <style lang="">

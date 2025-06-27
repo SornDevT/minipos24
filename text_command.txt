@@ -7,6 +7,7 @@ Laravel
     - php artisan make:model ‘ຊື່ Model’ -m  : ຄຳສັ່ງໃນການ ສ້າງ Model, -m ແມ່ນ ໃຫ້ສ້າງໄລ໌ migration
     - php artisan route:cache  : ຄຳສັ່ງເຄຼຍ Route Cache
     - php artisan migrate  : ຄຳສັ່ງ ທຳການ Migrate ສ້າງຕາຕະລາງ
+    - php artisan install:api   = ຕິດຕັ້ງ api ຂອງ Laravel
 
 
 VueJS
