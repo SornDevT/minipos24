@@ -28,7 +28,7 @@
               <div class="mb-6 form-password-toggle">
                 <label class="form-label" for="password">ລະຫັດຜ່ານ:</label>
                 <div class="input-group input-group-merge">
-                  <input :type="showPassword" id="password" class="form-control" v-model="password" name="password" placeholder="············" aria-describedby="password">
+                  <input :type="showPassword" id="password" class="form-control" v-model="password" name="password" @keyup.enter="login()" placeholder="············" aria-describedby="password">
                   <span class="input-group-text cursor-pointer" @click="showPassword = showPassword === 'password' ? 'text' : 'password'">
                     <i class="icon-base bx bx-hide" v-if="showPassword === 'password'"></i>
                     <i class="icon-base bx bx-show" v-else></i>

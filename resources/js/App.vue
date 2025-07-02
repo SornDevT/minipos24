@@ -104,7 +104,7 @@
             <div class="dropdown-divider my-1"></div>
           </li>
           <li>
-            <a class="dropdown-item" href="javascript:void(0);"> <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span> </a>
+            <a class="dropdown-item" @click="logout()" href="javascript:void(0);"> <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span> </a>
           </li>
         </ul>
       </li>
@@ -180,6 +180,7 @@
 </template>
 <script>
 
+import axios from 'axios';
 import { useStore } from './Store/auth'
 
 export default {
@@ -189,7 +190,41 @@ export default {
         return {
             store
         }
-    }
+    },
+    data() {
+      return {
+        
+      }
+    },
+    methods: {
+        logout() {
+            axios.get('/api/logout',{
+                headers: {
+                  Authorization: `Bearer ${this.store.getToken}`
+                }
+            }).then(response => {
+                    // if(response.data.success) {
+                    //     console.log("Logout successful");
+                    // } else {
+                    //     console.error("Logout failed:", response.data.message);
+                    // }
+
+                // clear token from store
+                this.store.logOut();
+
+                // clear local storage
+                localStorage.removeItem('web_token');
+                localStorage.removeItem('web_user');
+
+                // redirect to login page
+                this.$router.push('/login');
+
+                })
+                .catch(error => {
+                    console.log("Logout failed:", error);
+                });
+        }
+    },
 }
 </script>
 <style lang="">
