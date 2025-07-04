@@ -20,7 +20,7 @@ class CategoryController extends Controller
     {
         try {
             $category = new Category();
-            $category->CategoryName = $request->CategoryName;
+            $category->CategoryNam = $request->CategoryName;
             $category->save();
 
             $success = true;

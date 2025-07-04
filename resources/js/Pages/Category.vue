@@ -21,6 +21,9 @@
               </div>
             </li>
             
+            <hr>
+             <button @click="showAlert">Hello world</button>
+
           </ul>
         </div>
       </div>
@@ -54,6 +57,8 @@
 </template>
 <script>
 
+
+
 import { useStore } from '../Store/auth';
 
 export default {
@@ -71,6 +76,17 @@ export default {
     },
     methods: {
         // Add your methods here
+        showAlert() {
+      // Use sweetalert2
+      this.$swal({
+            toast: true,
+            position: "top-end",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 2500
+      });
+    },
         ShowCategoryModal() {
             const modal = new bootstrap.Modal(document.getElementById('AddCategoryModal'));
             modal.show();
@@ -122,8 +138,25 @@ export default {
                         // update the category list
                         this.GetCategory(); // Fetch categories again to update the list
 
+                        this.$swal({
+                                toast: true,
+                                position: "top-end",
+                                icon: "success",
+                                title: response.data.message,
+                                showConfirmButton: false,
+                                timer: 2500
+                        });
+
                     } else {
-                        console.error('Error saving category:', response.data.message);
+                        // console.error('Error saving category:', response.data.message);
+
+                        this.$swal({
+                                position: "center",
+                                icon: "error",
+                                title: "Error",
+                                text: response.data.message,
+                                timer: 5500
+                        });
                     }
         
                     
@@ -160,8 +193,24 @@ export default {
                         // update the category list
                         this.GetCategory(); // Fetch categories again to update the list
 
+                        this.$swal({
+                                toast: true,
+                                position: "top-end",
+                                icon: "success",
+                                title: response.data.message,
+                                showConfirmButton: false,
+                                timer: 2500
+                        });
+
                     } else {
-                        console.error('Error saving category:', response.data.message);
+
+                       this.$swal({
+                                position: "center",
+                                icon: "error",
+                                title: "Error",
+                                text: response.data.message,
+                                timer: 5500
+                        });
                     }
 
                 }).catch(error => {
@@ -184,29 +233,58 @@ export default {
         },
         DeleteCategory(id) {
 
-            axios.delete(`/api/category/delete/${id}`,{ headers: { Authorization: 'Bearer ' + this.store.getToken }}).then(response=>{
 
-                if(response.data.success){
-                    // update
-                    this.GetCategory()
-                }
+            this.$swal({
+                title: "ທ່ານແນ່ໃຈບໍ່?",
+                text: "ທີ່ຈະລຶບຂໍ້ມູນນີ້.!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຕົກລົງ",
+                cancelButtonText: "ຍົກເລີກ"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        axios.delete(`/api/category/delete/${id}`,{ headers: { Authorization: 'Bearer ' + this.store.getToken }}).then(response=>{
+                                if(response.data.success){
+                                    this.GetCategory();
+                                    this.$swal({
+                                            toast: true,
+                                            position: "top-end",
+                                            icon: "success",
+                                            title: response.data.message,
+                                            showConfirmButton: false,
+                                            timer: 2500
+                                    });
+                                } else{
+                                    this.$swal({
+                                            position: "center",
+                                            icon: "error",
+                                            title: "Error",
+                                            text: response.data.message,
+                                            timer: 5500
+                                    });
+                                }
 
-            }).catch(error => {
-                console.log(error.response.status);
-                    if(error){
-                        if(error.response.status === 401){
-                            // clear localstorage
-                            localStorage.removeItem('web_token');
-                            localStorage.removeItem('web_user');
-
-                            // clear token
-                            this.store.logOut();
-
-                            // go to login
-                            this.$router.push('/login');
-                        }
+                            }).catch(error => {
+                                console.log(error.response.status);
+                                    if(error){
+                                        if(error.response.status === 401){
+                                            localStorage.removeItem('web_token');
+                                            localStorage.removeItem('web_user');
+                                            this.store.logOut();
+                                            this.$router.push('/login');
+                                        }
+                                    }
+                            });
+                    
                     }
-            });
+                });
+
+
+
+            
         },
         GetCategory() {
             axios.get('/api/category',{ headers: { Authorization: 'Bearer ' + this.store.getToken }}).then(response => {

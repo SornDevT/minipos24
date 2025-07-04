@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category; // Assuming you have a Category model
 
 class ProductController extends Controller
 {
     public function index()
     {
         $products = Product::orderBy('id', 'asc')->get();
-        return response()->json($products);
+        $category = Category::orderBy('id', 'asc')->get();
+        
+        return response()->json([
+            'products' => $products,
+            'category' => $category,
+        ]);
     }
 
     public function add(Request $request)
@@ -19,9 +25,10 @@ class ProductController extends Controller
             $product = new Product();
             $product->ProductName = $request->ProductName;
             $product->CategoryID = $request->CategoryID;
-            $product->Price = $request->Price;
-            $product->Image = $request->Image;
-            $product->Description = $request->Description;
+            $product->ImagePath = $request->ImagePath;
+            $product->Qty = $request->Qty;
+            $product->PriceBuy = $request->PriceBuy;
+            $product->PriceSell = $request->PriceSell;
             $product->save();
 
             $success = true;
@@ -49,9 +56,10 @@ class ProductController extends Controller
             $product = Product::find($id);
             $product->ProductName = $request->ProductName;
             $product->CategoryID = $request->CategoryID;
-            $product->Price = $request->Price;
-            $product->Image = $request->Image;
-            $product->Description = $request->Description;
+            $product->ImagePath = $request->ImagePath;
+            $product->Qty = $request->Qty;
+            $product->PriceBuy = $request->PriceBuy;
+            $product->PriceSell = $request->PriceSell;
             $product->save();
 
             $success = true;

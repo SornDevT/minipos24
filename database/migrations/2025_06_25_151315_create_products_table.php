@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ProductName');
             $table->Integer('CategoryID');
-            $table->string('ImagePath');
+            $table->string('ImagePath')->nullable();
             $table->integer('Qty');
             $table->integer('PriceBuy');
             $table->integer('PriceSell');   
