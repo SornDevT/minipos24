@@ -8,6 +8,7 @@ import { createPinia } from 'pinia'
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import Pagination from './Components/Pagination.vue';
 
 
 const pinia = createPinia()
@@ -15,6 +16,7 @@ const pinia = createPinia()
 const app = createApp(App);
 app.use(VueSweetalert2);
 app.component('Menu', Menu);
+app.component('Pagination', Pagination);
 app.use(router);
 app.use(pinia);
 app.mount('#app');

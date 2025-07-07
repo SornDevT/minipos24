@@ -25,18 +25,18 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="price">ຈຳນວນ</label>
-                            <input type="text" class="form-control" v-model="FormProduct.Qty" id="quantity" placeholder="ປ້ອນຈຳນວນ">
+                            <Cleave :options="options" class="form-control" v-model="FormProduct.Qty" id="quantity" placeholder="ປ້ອນຈຳນວນ" />
                         </div>
                         <div class="col-md-6 mb-2">
                         
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="price">ລາຄາຊື້</label>
-                            <input type="text" class="form-control" v-model="FormProduct.PriceBuy" id="price" placeholder="ປ້ອນລາຄາ">
+                            <Cleave :options="options" class="form-control" v-model="FormProduct.PriceBuy" id="price" placeholder="ປ້ອນລາຄາ"/>
                         </div>
                         <div class="col-md-6 mb-2">
                             <label for="price">ລາຄາຂາຍ</label>
-                            <input type="text" class="form-control" v-model="FormProduct.PriceSell" id="price" placeholder="ປ້ອນລາຄາ">
+                            <Cleave :options="options"  class="form-control" v-model="FormProduct.PriceSell" id="price" placeholder="ປ້ອນລາຄາ"/>
                         </div>
                     </div>
                     
@@ -52,29 +52,30 @@
         </div>
 
         <div v-else>
-         <div class="row">
+         <div class="row"> 
+          <!-- {{Sort}} -->
             <div class="col-md-6 mb-2 d-flex align-items-center">
-                <div class=" me-2">
-                    <i class='bx bx-sort-up fs-4'></i>
-                    <i class='bx bx-sort-down fs-4' ></i>
+                <div class=" me-2 cursor-pointer" @click="Sort = Sort === 'asc' ? 'desc' : 'asc'">
+                    <i class='bx bx-sort-up fs-4' v-if="Sort === 'asc'"></i>
+                    <i class='bx bx-sort-down fs-4' v-else></i>
                 </div>
-                <select class="form-select w-auto me-2" >
+                <select v-model="PerPage" class="form-select w-auto me-2" >
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                     <option value="30">30</option>
                 </select>
 
-                <select class="form-select w-auto">
-                <option selected="">-- ທັງໝົດ --</option>
+                <select class="form-select w-auto" v-model="SeclectCategoryID" @change="GetAllProduct(1)">
+                <option value="all">-- ທັງໝົດ --</option>
                 <option :value="item.id" v-for="item in CategoryData" :key="item.id">{{ item.CategoryName }}</option>
                 </select>
 
             </div>
             <div class="col-md-6 mb-2 d-flex justify-content-end">
                 <div class="input-group w-auto me-2">
-                    <input type="text" class="form-control" placeholder="ຄົ້ນຫາ..." >
-                    <button class="btn btn-primary px-3" type="button" ><i class='bx bx-search fs-5' ></i></button>
+                    <input type="text" class="form-control" v-model="Search" @keyup.enter="GetAllProduct(1)" placeholder="ຄົ້ນຫາ..." >
+                    <button class="btn btn-primary px-3" type="button" @click="GetAllProduct(1)"><i class='bx bx-search fs-5' ></i></button>
                 </div>
 
                 <button type="button" class="btn btn-info" @click="AddProduct()">ເພີ່ມຂໍ້ມູນ</button>
@@ -87,124 +88,39 @@
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>Project</th>
-              <th>Client</th>
-              <th>Users</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th class="text-center">ID</th>
+              <th class="text-center">ຮູບພາບ</th>
+              <th>ຊື່ສິນຄ້າ</th>
+              <th >ໝວດໝູ່</th>
+              <th class="text-center">ຈຳນວນ</th>
+              <th class="text-end">ລາຄາຊື້</th>
+              <th class="text-center">ຈັດການ</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td><i class="icon-base bx bxl-angular icon-md text-danger me-4"></i> <span>Angular Project</span></td>
-              <td>Albert Cook</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Lilian Fuller" data-bs-original-title="Lilian Fuller">
-                    <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Sophia Wilkerson" data-bs-original-title="Sophia Wilkerson">
-                    <img src="../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Christina Parker" data-bs-original-title="Christina Parker">
-                    <img src="../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-primary me-1">Active</span></td>
-              <td>
+            <tr v-for="item in ProductData.data" :key="item.id">
+              <td>{{ item.id }}</td>
+              <td></td>
+              <td>{{ item.ProductName }}</td>
+              <td>{{ item.CategoryName }}</td>
+              <td class="text-center">{{ FormPrice(item.Qty) }}</td>
+              <td class="text-end">{{ FormPrice(item.PriceBuy) }} ກີບ</td>
+              <td class="text-center">
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-edit-alt me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-trash me-1"></i> Delete</a>
+                    <a class="dropdown-item text-info" href="javascript:void(0);" @click="EditProduct(item.id)"><i class="icon-base bx bx-edit-alt me-1"></i> ແກ້ໄຂ</a>
+                    <a class="dropdown-item text-danger" href="javascript:void(0);" @click="DeleteProduct(item.id)"><i class="icon-base bx bx-trash me-1"></i> ລົບ</a>
                   </div>
                 </div>
               </td>
             </tr>
-            <tr>
-              <td><i class="icon-base bx bxl-react icon-md text-info me-4"></i> <span>React Project</span></td>
-              <td>Barry Hunter</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Lilian Fuller" data-bs-original-title="Lilian Fuller">
-                    <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Sophia Wilkerson" data-bs-original-title="Sophia Wilkerson">
-                    <img src="../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Christina Parker" data-bs-original-title="Christina Parker">
-                    <img src="../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-success me-1">Completed</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-edit-alt me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-trash me-1"></i> Delete</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><i class="icon-base bx bxl-vuejs icon-md text-success me-4"></i> <span>VueJs Project</span></td>
-              <td>Trevor Baker</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Lilian Fuller" data-bs-original-title="Lilian Fuller">
-                    <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Sophia Wilkerson" data-bs-original-title="Sophia Wilkerson">
-                    <img src="../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Christina Parker" data-bs-original-title="Christina Parker">
-                    <img src="../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-edit-alt me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-trash me-1"></i> Delete</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td><i class="icon-base bx bxl-bootstrap icon-md text-primary me-4"></i> <span>Bootstrap Project</span></td>
-              <td>Jerry Milton</td>
-              <td>
-                <ul class="list-unstyled m-0 avatar-group d-flex align-items-center">
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Lilian Fuller" data-bs-original-title="Lilian Fuller">
-                    <img src="../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Sophia Wilkerson" data-bs-original-title="Sophia Wilkerson">
-                    <img src="../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                  <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" aria-label="Christina Parker" data-bs-original-title="Christina Parker">
-                    <img src="../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle">
-                  </li>
-                </ul>
-              </td>
-              <td><span class="badge bg-label-warning me-1">Pending</span></td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
-                  <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-edit-alt me-1"></i> Edit</a>
-                    <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-trash me-1"></i> Delete</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
+            
           </tbody>
         </table>
+
+        <Pagination :pagination="ProductData" :offset="4" @paginate="GetAllProduct($event)" />
+
       </div>
       </div>
 
@@ -217,6 +133,7 @@
 
 import axios from 'axios';
 import { useStore } from '../Store/auth';
+import Cleave from 'vue-cleave-component';
 
 export default {
     setup() {
@@ -238,7 +155,24 @@ export default {
                 PriceBuy: '',
                 PriceSell: '',
             },
+            SeclectCategoryID: 'all',
+            PerPage: 10, // Default items per page
+            Sort: 'desc',
+            Search:'',
+            options: {
+                  numeral: true,
+                  numeralPositiveOnly: true,
+                  noImmediatePrefix: true,
+                  rawValueTrimPrefix: true,
+                  numeralIntegerScale: 10,
+                  numeralDecimalScale: 2,
+                  numeralDecimalMark: '.',
+                  delimiter: ','
+                }
         }
+    },
+    components: {
+        Cleave,
     },
     computed: {
         CheckFormProduct() {
@@ -250,6 +184,19 @@ export default {
         },
     },
     methods:{
+        FormPrice(value) {
+            // Format the price input to a number  exp: 120000 = 120,000 custom decimal format
+            // if (value) {
+            //     return new Intl.NumberFormat('en-US', {
+            //         style: 'decimal',
+            //         minimumFractionDigits: 0,
+            //     }).format(value);
+            // }
+            // return value;
+            ///------------------
+             let val = (value / 1).toFixed(0).replace(",", ".");
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
         AddProduct(){
            this.ShowForm = true;
            this.FormType = true; // Set to add mode
@@ -271,6 +218,24 @@ export default {
         EditProduct(id){
             this.EditID = id;
             // Add your logic to edit a product
+            axios.get(`/api/product/edit/${id}`, { headers: { Authorization: `Bearer ${this.store.getToken}` }
+            }).then(response => {
+      
+                    this.FormProduct = response.data;
+                    this.ShowForm = true;
+                    this.FormType = false; // Set to update mode
+          
+            }).catch(error => {
+                console.log(error.response.status);
+                                    if(error){
+                                        if(error.response.status === 401){
+                                            localStorage.removeItem('web_token');
+                                            localStorage.removeItem('web_user');
+                                            this.store.logOut();
+                                            this.$router.push('/login');
+                                        }
+                                    }
+            });
   
         },
         SaveProduct(){
@@ -352,10 +317,57 @@ export default {
         },
         DeleteProduct(id){
             // Add your logic to delete a product
+             this.$swal({
+                title: "ທ່ານແນ່ໃຈບໍ່?",
+                text: "ທີ່ຈະລຶບຂໍ້ມູນນີ້.!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "ຕົກລົງ",
+                cancelButtonText: "ຍົກເລີກ"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                        axios.delete(`/api/product/delete/${id}`, { headers: { Authorization: `Bearer ${this.store.getToken}` }
+                        }).then(response => {
+                            if(response.data.success) {
+                                this.GetAllProduct();
+                                this.$swal({
+                                    toast: true,
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: response.data.message,
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                });
+                            } else {
+                                this.$swal({
+                                    position: "center",
+                                    icon: "error",
+                                    title: "Error",
+                                    text: response.data.message,
+                                    timer: 5500
+                                });
+                            }
+                        }).catch(error => {
+                            console.log(error.response.status);
+                            if(error){
+                                if(error.response.status === 401){
+                                    localStorage.removeItem('web_token');
+                                    localStorage.removeItem('web_user');
+                                    this.store.logOut();
+                                    this.$router.push('/login');
+                                }
+                            }
+                        });
+                    
+                    }
+                });
         },
-        GetAllProduct(){
+        GetAllProduct(page = 1) {
 
-            axios.get('/api/product', { headers: { Authorization: `Bearer ${this.store.getToken}` }
+            axios.get(`/api/product?page=${page}&perpage=${this.PerPage}&sort=${this.Sort}&category_id=${this.SeclectCategoryID}&search=${this.Search}`, { headers: { Authorization: `Bearer ${this.store.getToken}` }
             }).then(response => {
 
                 this.ProductData = response.data.products;
@@ -378,6 +390,20 @@ export default {
     created() {
         this.GetAllProduct();
     },
+    watch: {
+        PerPage() {
+            this.GetAllProduct(1);
+        },
+        Sort() {
+            this.GetAllProduct(1);
+        },
+        Search(val) {
+            if ( val.length === 0) {
+                this.GetAllProduct(1);
+            }
+     
+        }
+    }
 }
 </script>
 <style lang="">

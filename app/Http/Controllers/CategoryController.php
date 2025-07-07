@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category; // Assuming you have a Category model
+use App\Models\Product; // Assuming you have a Product model
 
 class CategoryController extends Controller
 {
@@ -66,6 +67,16 @@ class CategoryController extends Controller
 
     public function delete($id){
          try {
+
+            // ກວດວ່າ id ມີຢູ່ໃນຕາຕະລາງ products ຫຼືບໍ່
+            $productCount = Product::where('CategoryID', $id)->count();
+            if ($productCount > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'ບໍ່ສາມາດລຶບຂໍໍ້ມູນນີ້ໄດ້, ໝວດໝູ່ສິນຄ້ານີ້ມີການນຳໃຊ້!',
+                ]);
+            }
+
 
             $category = Category::find($id);
             $category->delete();
