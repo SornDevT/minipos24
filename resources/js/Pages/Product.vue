@@ -3,14 +3,19 @@
     <h5 class="card-header">ລາຍການສິນຄ້າ</h5>
     <div class="card-body">
 
-
+<!-- {{FormProduct}} -->
         <div v-if="ShowForm">
-            <div class="row">
-                <div class="col-md-4">
-                    Image 
+            <div class="row"> 
+                <div class="col-md-4" style="position: relative;">
+                    <button type="button" class="btn rounded-pill btn-icon btn-danger btrm" v-if="FormProduct.ImagePath" @click="RemoveImage()">
+                        <i class='bx bx-x-circle'></i>
+                    </button>
+                    <img :src="ImagePreview" @click="$refs.img_upload.click()" class="img-fluid mb-2 cursor-pointer" alt="Product Image" />
+
+                    <input type="file" accept="image/*" @change="onSelect($event)" ref="img_upload" style="display: none;" class="form-control mb-2" id="image" >
                 </div>
                 <div class="col-md-8">
-                     <!-- {{FormProduct}} | {{CheckFormProduct}} -->
+                     <!-- {{FormProduct}}  -->
                     <div class="row">
                         <div class="col-md-6 mb-2">
                             <label for="name">ຊື່ສິນຄ້າ</label>
@@ -89,7 +94,7 @@
           <thead>
             <tr>
               <th class="text-center">ID</th>
-              <th class="text-center">ຮູບພາບ</th>
+              <th class="text-center" width="120">ຮູບພາບ</th>
               <th>ຊື່ສິນຄ້າ</th>
               <th >ໝວດໝູ່</th>
               <th class="text-center">ຈຳນວນ</th>
@@ -97,10 +102,15 @@
               <th class="text-center">ຈັດການ</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody> 
             <tr v-for="item in ProductData.data" :key="item.id">
               <td>{{ item.id }}</td>
-              <td></td>
+              <td class="text-center">
+                    <img :src="item.ImagePath" v-if="item.ImagePath" alt="Product Image " class="img-fluid img_list text-center" />
+
+                    <img :src="url+'/assets/img/no_img.png'" v-else alt="Product Image" class="img-fluid img_list text-center" />
+
+                 </td>
               <td>{{ item.ProductName }}</td>
               <td>{{ item.CategoryName }}</td>
               <td class="text-center">{{ FormPrice(item.Qty) }}</td>
@@ -142,6 +152,8 @@ export default {
     },
     data() {
         return {
+            url: window.location.origin,
+            ImagePreview: window.location.origin+'/assets/img/img-upload.jpg', // For image preview
             CategoryData: [],
             ProductData: [],
             ShowForm: false,
@@ -184,6 +196,24 @@ export default {
         },
     },
     methods:{
+        RemoveImage(){
+            this.ImagePreview = window.location.origin+'/assets/img/img-upload.jpg';
+            this.FormProduct.ImagePath = '';
+        },
+        onSelect(e){
+            console.log(e);
+            if (e.target.files && e.target.files[0]) {  
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    this.ImagePreview = event.target.result;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+                this.FormProduct.ImagePath = e.target.files[0]; // Store the file in FormProduct
+            } else {
+                this.ImagePreview = window.location.origin+'/assets/img/img-upload.jpg'; // Reset to default image
+                this.FormProduct.ImagePath = ''; // Reset the file in FormProduct
+            }
+        },
         FormPrice(value) {
             // Format the price input to a number  exp: 120000 = 120,000 custom decimal format
             // if (value) {
@@ -209,6 +239,7 @@ export default {
                  PriceBuy: '',
                  PriceSell: '',
                 };
+                this.ImagePreview = window.location.origin+'/assets/img/img-upload.jpg';
 
         },
         CancelAddProduct(){
@@ -224,6 +255,8 @@ export default {
                     this.FormProduct = response.data;
                     this.ShowForm = true;
                     this.FormType = false; // Set to update mode
+
+                    this.ImagePreview = response.data.ImagePath ? response.data.ImagePath : window.location.origin+'/assets/img/img-upload.jpg';
           
             }).catch(error => {
                 console.log(error.response.status);
@@ -242,7 +275,7 @@ export default {
 
             if(this.FormType) {
                 // Add new product
-                axios.post('/api/product/add', this.FormProduct, { headers: { Authorization: `Bearer ${this.store.getToken}` }
+                axios.post('/api/product/add', this.FormProduct, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${this.store.getToken}` }
                 }).then(response => {
                     
                     if(response.data.success) {
@@ -279,7 +312,7 @@ export default {
                 });
             } else {
                 // Update existing product
-                axios.post(`/api/product/update/${this.EditID}`, this.FormProduct, { headers: { Authorization: `Bearer ${this.store.getToken}` }
+                axios.post(`/api/product/update/${this.EditID}`, this.FormProduct, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${this.store.getToken}` }
                 }).then(response => {
                     if(response.data.success) {
                         this.GetAllProduct();
@@ -406,6 +439,18 @@ export default {
     }
 }
 </script>
-<style lang="">
-    
+<style >
+    .img_list {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 5px;
+    }   
+
+    .btrm{
+        position: absolute;
+        top: 15px;
+        right: 25px;
+    }
 </style>

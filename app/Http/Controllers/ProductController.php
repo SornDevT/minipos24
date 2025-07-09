@@ -50,10 +50,25 @@ class ProductController extends Controller
     public function add(Request $request)
     {
         try {
+
+            $ImagePath = 'assets/img/';
+
+            // check if the request has a file for ImagePath
+            if ($request->hasFile('ImagePath')) {
+                $file = $request->file('ImagePath');
+                $filename = 'img_'.time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path($ImagePath), $filename);
+                $NewImagePath = $ImagePath . $filename; // Store the path to the image
+            } else {
+                $NewImagePath = null; 
+            }
+
+
+
             $product = new Product();
             $product->ProductName = $request->ProductName;
             $product->CategoryID = $request->CategoryID;
-            $product->ImagePath = $request->ImagePath;
+            $product->ImagePath = $NewImagePath;
             $product->Qty = $request->Qty;
             $product->PriceBuy = $request->PriceBuy;
             $product->PriceSell = $request->PriceSell;
@@ -80,11 +95,76 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
+
         try {
+
+            $ImagePath = 'assets/img/';
             $product = Product::find($id);
+
+            // return File size and File Type
+            // $file = $request->file('ImagePath');
+
+            // // Get file size in bytes
+            // $fileSize = $file->getSize(); // e.g. 102400
+
+            // // Get file size in KB or MB (optional)
+            // $fileSizeKB = round($fileSize / 1024, 2); // KB
+            // $fileSizeMB = round($fileSize / 1024 / 1024, 2); // MB
+
+            // // Get MIME type
+            // $mimeType = $file->getMimeType(); // e.g. image/jpeg
+
+            // // Get original extension
+            // $extension = $file->getClientOriginalExtension(); // e.g. jpg
+
+            // // Return info as JSON
+            // return response()->json([
+            //     'size_bytes' => $fileSize,
+            //     'size_kb' => $fileSizeKB,
+            //     'size_mb' => $fileSizeMB,
+            //     'mime_type' => $mimeType,
+            //     'extension' => $extension,
+            // ]);
+
+
+
+            // If the request has a file for ImagePath, delete the old image if it exists
+            if ($request->hasFile('ImagePath')) {
+                // Check if the old image exists and delete it
+                if ($product->ImagePath && file_exists(public_path($product->ImagePath))) {
+                    unlink(public_path($product->ImagePath));
+                }   
+           
+
+
+                    // check if the request has a file for ImagePath
+                    if ($request->hasFile('ImagePath')) {
+                        $file = $request->file('ImagePath');
+                        $filename = 'img_'.time() . '.' . $file->getClientOriginalExtension();
+                        $file->move(public_path($ImagePath), $filename);
+                        $NewImagePath = $ImagePath . $filename; // Store the path to the image
+                    } else {
+                        $NewImagePath = null;
+                    }
+
+                    $product->ImagePath = $NewImagePath; // Update the ImagePath
+             } else {
+
+                if($request->ImagePath == null){
+                    
+                    // remove the old image if it exists
+                    if ($product->ImagePath && file_exists(public_path($product->ImagePath))) {
+                            unlink(public_path($product->ImagePath));
+                        } 
+
+                    $product->ImagePath = null; // If no image is uploaded, set ImagePath to null
+                }
+
+             }
+
+            
             $product->ProductName = $request->ProductName;
             $product->CategoryID = $request->CategoryID;
-            $product->ImagePath = $request->ImagePath;
             $product->Qty = $request->Qty;
             $product->PriceBuy = $request->PriceBuy;
             $product->PriceSell = $request->PriceSell;
@@ -92,7 +172,11 @@ class ProductController extends Controller
 
             $success = true;
             $message = "ອັບເດດສິນຄ້າສຳເລັດ!";
-        } catch (\Illuminate\Database\QueryException $ex) {
+        
+            }
+        catch (\Illuminate\Database\QueryException $ex) {
+
+
             $success = false;
             $message = $ex->getMessage();
         }
