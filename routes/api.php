@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 // create product routes
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/product', [ProductController::class, 'index']);
+    Route::get('/product/list', [ProductController::class, 'list']);
     Route::post('/product/add', [ProductController::class, 'add']);
     Route::get('/product/edit/{id}', [ProductController::class, 'edit']);
     Route::post('/product/update/{id}', [ProductController::class, 'update']);

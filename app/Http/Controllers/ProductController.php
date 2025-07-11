@@ -187,6 +187,49 @@ class ProductController extends Controller
         ]);
     }
 
+    public function list(){
+
+
+         
+        $sort = \Request::get('sort'); // Default sort order is ascending
+        $category_id = \Request::get('category_id'); // Get the selected category ID
+        $search = \Request::get('search'); // Get the search term
+
+        $products = Product::join('categories', 'products.CategoryID', '=', 'categories.id')
+        ->select('products.*', 'categories.CategoryName');
+
+        // If a specific category is selected, filter products by that category
+        if ($category_id && $category_id !== 'all') {
+            $products = $products->where('products.CategoryID', $category_id);
+        }
+
+        //    dd($products);
+
+        // If a search term is provided, filter products by multiple fields ProductName, CategoryName, and PriceBuy
+        if ($search) {
+            $products = $products->where(function ($query) use ($search) {
+                $query->where('products.ProductName', 'like', '%' . $search . '%')
+                      ->orWhere('categories.CategoryName', 'like', '%' . $search . '%')
+                      ->orWhere('products.PriceBuy', 'like', '%' . $search . '%');
+            });
+        }
+
+        $products = $products->orderBy('products.id', 'asc')
+        ->get();
+
+
+        $category = Category::orderBy('id', 'asc')->get();  
+
+        // return   $products;
+
+        return response()->json([
+            'products' => $products,
+            'categort' => $category,
+        ]);
+
+
+    }
+
     public function delete($id)
     {
         try {
