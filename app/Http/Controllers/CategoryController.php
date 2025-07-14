@@ -17,6 +17,7 @@ class CategoryController extends Controller
         return response()->json($categories);
     }
 
+
     public function add(Request $request)
     {
         try {

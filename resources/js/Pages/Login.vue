@@ -110,7 +110,9 @@ export default {
         } else {
           return false; // Enable the button if form is valid
         }
-      }
+      },
+      // created buttom status for press login buttom to disable
+      
     },
     methods: {
 
@@ -142,6 +144,9 @@ export default {
           // Handle login error
           console.error('Login error:', error);
           this.message_error = error.response.data.message;
+          // clear localstorage
+          
+
         });
       }
     }

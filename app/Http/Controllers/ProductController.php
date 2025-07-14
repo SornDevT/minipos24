@@ -191,7 +191,7 @@ class ProductController extends Controller
 
 
          
-        $sort = \Request::get('sort'); // Default sort order is ascending
+        // $sort = \Request::get('sort'); // Default sort order is ascending
         $category_id = \Request::get('category_id'); // Get the selected category ID
         $search = \Request::get('search'); // Get the search term
 
@@ -224,7 +224,7 @@ class ProductController extends Controller
 
         return response()->json([
             'products' => $products,
-            'categort' => $category,
+            'category' => $category,
         ]);
 
 

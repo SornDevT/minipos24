@@ -9,9 +9,9 @@
 
     <!-- build:css assets/vendor/css/theme.css  -->
     
-    <link rel="stylesheet" href="../assets/vendor/css/core.css">
-    <link rel="stylesheet" href="../assets/css/demo.css">
-    <link rel="stylesheet" href="../assets/css/font_lao.css">
+    <link rel="stylesheet" href="{{ url('assets/vendor/css/core.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/css/demo.css') }}">
+    <link rel="stylesheet" href="{{ url('assets/css/font_lao.css') }}">
 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    
@@ -27,25 +27,25 @@
          <!-- Core JS -->
     
     
-    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="../assets/vendor/libs/popper/popper.js"></script>
-    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="{{ url('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ url('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ url('assets/vendor/js/bootstrap.js') }}"></script>
 
     
 
     
-      <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script src="{{ url('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
       
-      <script src="../assets/vendor/js/menu.js"></script>
+      <script src="{{ url('assets/vendor/js/menu.js') }}"></script>
     
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="{{ url('assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 
     <!-- Main JS -->
     
-      <script src="../assets/js/main.js"></script>
+      <script src="{{ url('assets/js/main.js') }}"></script>
 
 </body>
 </html>

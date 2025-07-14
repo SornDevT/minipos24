@@ -75,6 +75,7 @@ export default {
         password: '',
         confirmPassword: '',
         message_error: '',
+        
       }
     },
     methods: {
@@ -112,6 +113,7 @@ export default {
               // Handle registration error
               console.error('Registration error:', error);
               this.message_error = error.response.data.message;
+              
             });
 
           }

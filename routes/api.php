@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransectionController;
+use App\Http\Controllers\BillController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -32,3 +34,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('/product/update/{id}', [ProductController::class, 'update']);
     Route::delete('/product/delete/{id}', [ProductController::class, 'delete']);
 });
+
+Route::group(['middleware' => 'auth:api'], function(){
+    Route::post('/transection/add', [TransectionController::class, 'add']);
+    Route::get('/bill/print/{id}', [BillController::class, 'print']);
+});
+

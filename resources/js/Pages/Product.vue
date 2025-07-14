@@ -113,8 +113,8 @@
                  </td>
               <td>{{ item.ProductName }}</td>
               <td>{{ item.CategoryName }}</td>
-              <td class="text-center">{{ FormPrice(item.Qty) }}</td>
-              <td class="text-end">{{ FormPrice(item.PriceBuy) }} ກີບ</td>
+              <td class="text-center">{{ FormatPrice(item.Qty) }}</td>
+              <td class="text-end">{{ FormatPrice(item.PriceBuy) }} ກີບ</td>
               <td class="text-center">
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
@@ -214,16 +214,7 @@ export default {
                 this.FormProduct.ImagePath = ''; // Reset the file in FormProduct
             }
         },
-        FormPrice(value) {
-            // Format the price input to a number  exp: 120000 = 120,000 custom decimal format
-            // if (value) {
-            //     return new Intl.NumberFormat('en-US', {
-            //         style: 'decimal',
-            //         minimumFractionDigits: 0,
-            //     }).format(value);
-            // }
-            // return value;
-            ///------------------
+        FormatPrice(value) {
              let val = (value / 1).toFixed(0).replace(",", ".");
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
@@ -405,6 +396,7 @@ export default {
 
                 this.ProductData = response.data.products;
                 this.CategoryData = response.data.category;
+                
 
             }).catch(error => {
                 console.log(error.response.status);
