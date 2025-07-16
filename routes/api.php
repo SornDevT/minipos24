@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransectionController;
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\ReportController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -36,7 +37,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 });
 
 Route::group(['middleware' => 'auth:api'], function(){
+    Route::get('/transection', [TransectionController::class, 'index']);
     Route::post('/transection/add', [TransectionController::class, 'add']);
     Route::get('/bill/print/{id}', [BillController::class, 'print']);
+    Route::get('/report', [ReportController::class, 'index']);
 });
 

@@ -13,6 +13,41 @@ class TransectionController extends Controller
 {
     //
 
+    public function index(){
+
+        $sort = \Request::get('sort');
+        $perpage = \Request::get('perpage');
+        $month_type = \Request::get('month_type');
+        $dmy = \Request::get('dmy');
+
+
+        $m = explode('-', $dmy)[1]; // 2025-07-16
+        $y = explode('-', $dmy)[0];
+
+        // get transection by month
+        if($month_type === 'm') {
+            
+            $tran = Transection::orderBy('id', $sort)
+                ->whereMonth('created_at', $m)
+                ->whereYear('created_at', $y)
+                ->paginate($perpage)
+                ->toArray();
+
+        } elseif($month_type === 'y') {
+            
+            $tran = Transection::orderBy('id', $sort)
+                ->whereYear('created_at', $y)
+                ->paginate($perpage)
+                ->toArray();
+
+        } 
+
+
+        return array_reverse($tran);
+
+
+    }
+
     public function add(Request $request)
     {
         try {
