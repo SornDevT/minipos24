@@ -1,4 +1,6 @@
 <template lang="">
+
+    <Dashgrap />
     <div class="card">
     <h5 class="card-header">ລາຍການສິນຄ້າ</h5>
     <div class="card-body">
@@ -144,6 +146,7 @@
 import axios from 'axios';
 import { useStore } from '../Store/auth';
 import Cleave from 'vue-cleave-component';
+import Dashgrap from '../Components/Dashgrap.vue';
 
 export default {
     setup() {
@@ -184,7 +187,7 @@ export default {
         }
     },
     components: {
-        Cleave,
+        Cleave, Dashgrap
     },
     computed: {
         CheckFormProduct() {

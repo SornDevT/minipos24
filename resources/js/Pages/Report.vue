@@ -1,4 +1,6 @@
 <template lang="">
+
+    <aaaa />
     <div class="row">
             <div class="col-md-8">
                <div class="card">
@@ -32,7 +34,35 @@
   
             </div>
             <div class="col-md-4">
-                123
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class=" d-flex justify-content-between">
+                            <span> <i class='bx bx-download fs-4'></i> <br> ລາຍຮັບ </span>
+                            <span> {{ FormatPrice(sum_income) }} ກີບ </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class=" d-flex justify-content-between">
+                            <span> <i class='bx bx-trending-down fs-4'></i> <br> ລາຍຈ່າຍ </span>
+                            <span> {{  FormatPrice(sum_expense)  }} ກີບ </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class=" d-flex justify-content-between">
+                            <span> <i class='bx bxs-objects-vertical-bottom fs-4'></i> <br> ກຳໄລ </span>
+                            <span> {{ FormatPrice(sum_income-sum_expense) }} ກີບ </span>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
     </div>
 </template>
@@ -40,6 +70,7 @@
 import { useStore } from '../Store/auth';
 import { DoughnutChart, LineChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
+import aaaa from '../Components/Dashgrap.vue';
 
 Chart.register(...registerables);
 
@@ -100,9 +131,13 @@ export default {
     },
     components:{
         // DoughnutChart
-        LineChart
+        LineChart, aaaa
     },
     methods:{
+    FormatPrice(value) {
+             let val = (value / 1).toFixed(0).replace(",", ".");
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
         CreatedReport(){
 
              axios.get(`/api/report?dmy=${this.dmy}&month_type=${this.month_type}`,{

@@ -21,8 +21,8 @@
               </div>
             </li>
             
-            <hr>
-             <button @click="showAlert">Hello world</button>
+            <!-- <hr>
+             <button @click="showAlert">Hello world</button> -->
 
           </ul>
         </div>

@@ -22,7 +22,7 @@ class CategoryController extends Controller
     {
         try {
             $category = new Category();
-            $category->CategoryNam = $request->CategoryName;
+            $category->CategoryName = $request->CategoryName;
             $category->save();
 
             $success = true;
