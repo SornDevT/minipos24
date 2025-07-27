@@ -34,6 +34,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('/product/edit/{id}', [ProductController::class, 'edit']);
     Route::post('/product/update/{id}', [ProductController::class, 'update']);
     Route::delete('/product/delete/{id}', [ProductController::class, 'delete']);
+    Route::get('/product/export', [ProductController::class, 'export']);
+    Route::post('/product/import', [ProductController::class, 'import']);
 });
 
 Route::group(['middleware' => 'auth:api'], function(){

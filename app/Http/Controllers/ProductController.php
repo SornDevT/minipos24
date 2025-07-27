@@ -7,6 +7,11 @@ use App\Models\Product;
 use App\Models\Transection;
 use App\Models\Category; // Assuming you have a Category model
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportProduct;
+
+use App\Imports\ImportProduct;
+
 class ProductController extends Controller
 {
     public function index()
@@ -262,5 +267,31 @@ class ProductController extends Controller
             'success' => $success,
             'message' => $message,
         ]);
+    }
+
+    public function export()
+    {
+        try {
+            
+            return Excel::download(new ExportProduct, 'products.xlsx');
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error exporting products: ' . $e->getMessage(),
+            ], 500);
+        }
+       
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $file = $request->file('file');
+            Excel::import(new ImportProduct, $file);
+            return response()->json(['success' => true, 'message' => 'ນຳເຂົ້າສິນຄ້າສຳເລັດ!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error importing products: ' . $e->getMessage()], 500);
+        }
     }
 }

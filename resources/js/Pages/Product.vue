@@ -80,6 +80,14 @@
 
             </div>
             <div class="col-md-6 mb-2 d-flex justify-content-end">
+                <div class="me-2">
+                    <button class="btn btn-primary" @click="$refs.import_file.click()">Import</button>
+
+                    <input type="file" accept=".xlsx, .xls" @change="ImportProduct($event)" class="form-control-file" style="display: none;" ref="import_file">
+                </div>
+                <div class="me-2">
+                    <button class="btn btn-success" @click="ExportProduct()"> Export </button>
+                </div>
                 <div class="input-group w-auto me-2">
                     <input type="text" class="form-control" v-model="Search" @keyup.enter="GetAllProduct(1)" placeholder="ຄົ້ນຫາ..." >
                     <button class="btn btn-primary px-3" type="button" @click="GetAllProduct(1)"><i class='bx bx-search fs-5' ></i></button>
@@ -199,6 +207,78 @@ export default {
         },
     },
     methods:{
+        ImportProduct(event){
+
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            axios.post('/api/product/import', formData, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${this.store.getToken}` }
+            }).then(response => {
+                if(response.data.success) {
+                    // Reset the file input
+                    event.target.value = '';
+                    
+                    this.GetAllProduct();
+                    this.$swal({
+                        toast: true,
+                        position: "top-end",
+                        icon: "success",
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                } else {
+                    this.$swal({
+                        position: "center",
+                        icon: "error",
+                        title: "Error",
+                        text: response.data.message,
+                        timer: 5500
+                    });
+                }
+            }).catch(error => {
+                console.log(error.response.status);
+                                    if(error){
+                                        if(error.response.status === 401){
+                                            localStorage.removeItem('web_token');
+                                            localStorage.removeItem('web_user');
+                                            this.store.logOut();
+                                            this.$router.push('/login');
+                                        }
+                                    }
+            });
+
+        },
+    ExportProduct(){
+
+            axios.get('/api/product/export', { headers: { Authorization: `Bearer ${this.store.getToken}` },
+                responseType: 'blob' // Set response type to blob for file download
+            }).then(response => {
+               
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'products.xlsx'); // Set the file name
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+            }).catch(error => {
+                console.log(error.response.status);
+                                    if(error){
+                                        if(error.response.status === 401){
+                                            localStorage.removeItem('web_token');
+                                            localStorage.removeItem('web_user');
+                                            this.store.logOut();
+                                            this.$router.push('/login');
+                                        }
+                                    }
+            });
+
+    },
         RemoveImage(){
             this.ImagePreview = window.location.origin+'/assets/img/img-upload.jpg';
             this.FormProduct.ImagePath = '';
